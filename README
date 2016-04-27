@@ -1,0 +1,7 @@
+QoS Driver Interface for application in user space
+=====
+
+Dependencies:
+-------------
+
+*qos_drv
