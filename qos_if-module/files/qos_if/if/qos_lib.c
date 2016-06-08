@@ -94,6 +94,8 @@ int qos_lib_setall_from_csv(unsigned long handle, char *read_file)
 	int master_id;
 	unsigned char  ip_name[64], fix_address[64], be_address[64];
 	unsigned long long fix_value, be_value;
+	int fix_l, fix_band, be_l, be_band;
+	int major, minor;
 	int index = 0;
 
 	if ((hdl == NULL) || (read_file == NULL)) {
@@ -107,15 +109,35 @@ int qos_lib_setall_from_csv(unsigned long handle, char *read_file)
 		return -1;
 	}
 
+	if (fgets(buf, sizeof(buf), fp)) {
+		if (sscanf(buf, "ver %d.%d", &major, &minor) == 2) {
+			printf("QoS : CSV file ver %d.%d\n", major, minor);
+		} else {
+			rewind(fp);
+		}
+	}
+
 	while (fgets(buf, sizeof(buf), fp)) {
-		if (sscanf(buf, "%d, %[^,], %[^,], %llx, %[^,], %llx",
+		if (sscanf(buf, "%d, %[^,], %[^,], %llx, %[^,], %llx, %d, %d, %d, %d",
 			&master_id, ip_name, fix_address,
-			&fix_value, be_address, &be_value) != 6) {
+			&fix_value, be_address, &be_value,
+			&fix_l, &fix_band, &be_l, &be_band) == 10) {
+			;
+		} else if (sscanf(buf, "%d, %[^,], %[^,], %llx, %[^,], %llx",
+			&master_id, ip_name, fix_address,
+			&fix_value, be_address, &be_value) == 6) {
+#ifdef QOS_DEBUG
+			fix_l = fix_band = be_l = be_band = 0;
+#else
+			;
+#endif
+		} else {
 			printf("data-format is wrong!\n");
 		}
 #ifdef QOS_DEBUG
 		printf("index:%d\n", index);
-		printf("FIX:0x%016llx BE:0x%016llx\n", fix_value, be_value);
+		printf(" FIX:0x%016llx BE:0x%016llx\n", fix_value, be_value);
+		printf(" FIX:%d %d BE:%d %d\n", fix_l, fix_band, be_l, be_band);
 #endif
 		memcpy(fix_qos + (8 * index), &fix_value,
 			sizeof(unsigned long long));
