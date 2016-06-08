@@ -80,6 +80,8 @@ int qos_lib_setall(unsigned long handle,
 	ret = ioctl(hdl->fd, QOS_IOCTL_SET_ALL_QOS, &all_qos_param);
 	if (ret != 0)
 		ERR_PRINT("ioctl(QOS_IOCTL_SET_ALL_QOS)\n");
+	else
+		puts("QoS : setall success!");
 
 	return ret;
 }
