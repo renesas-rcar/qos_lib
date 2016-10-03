@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <inttypes.h>
 #include <sys/ioctl.h>
 
@@ -54,8 +55,10 @@ int qos_lib_quit(unsigned long handle)
 {
 	struct qos_lib_handle *hdl = (struct qos_lib_handle *)handle;
 
-	if (hdl)
+	if (hdl) {
+		close(hdl->fd);
 		free(hdl);
+	}
 
 	return 0;
 }
