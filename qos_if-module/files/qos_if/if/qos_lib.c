@@ -171,8 +171,10 @@ int qos_lib_switch(unsigned long handle)
 	}
 
 	ret = ioctl(hdl->fd, QOS_IOCTL_SWITCH_MEMBANK, NULL);
-	if (ret != 0)
+	if (ret != 0) {
 		ERR_PRINT("ioctl(QOS_IOCTL_SWITCH_MEMBANK)\n");
+		return -1;
+	}
 
 	return 0;
 }
