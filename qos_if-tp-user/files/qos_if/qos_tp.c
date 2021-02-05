@@ -179,11 +179,11 @@ static void get_input(char *buf, unsigned int size)
 {
 	char *p;
 
-	fgets(buf, size, stdin);
-	p = strchr(buf, '\n');
-	if (p)
-		*p = '\0';
-
+	if (fgets(buf, size, stdin)) {
+		p = strchr(buf, '\n');
+		if (p)
+			*p = '\0';
+	}
 }
 
 static int cmd_convert(char *cmd)
