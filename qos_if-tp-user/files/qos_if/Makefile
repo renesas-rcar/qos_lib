@@ -5,7 +5,7 @@ QOS_MODULE =
 all: $(TARGET_NAME)
 LIBS = -lrt -L$(LIBSHARED) -lqos
 $(TARGET_NAME): qos_tp.c
-	$(CC) -o $@ $< $(LIBS) -I$(INCSHARED)/$(QOS_MODULE)
+	$(CC) -o $@ $< $(LIBS) -I$(INCSHARED)/$(QOS_MODULE) -O2
 
 clean:
 	rm -f *.o
